@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- Defines this as an HTML5 document -->
+
+<html lang="en">
+<head>
+    <!-- Metadata for the page -->
+
+    <meta charset="UTF-8">
+    <!-- Ensures correct character encoding -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Makes the page responsive -->
+
+    <title>Job Application Tracker</title>
+    <!-- Title shown in browser tab -->
+
+    <!-- Link to CSS styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Main container -->
+    <div class="page">
+
+        <!-- Main title -->
+        <div class="title-box">
+            <h1>Job Application Tracker</h1>
+        </div>
+
+        <!-- Description of the app -->
+        <p class="info">
+            Track your job applications, deadlines, interview dates and outcomes in one place.
+        </p>
+
+        <!-- Navigation buttons -->
+        <div class="buttons">
+
+            <!-- Button to go to registration page -->
+            <a href="{{ url_for('register') }}" class="btn green">Create Account</a>
+
+            <!-- Button to go to login page -->
+            <a href="{{ url_for('login') }}" class="btn blue">Login</a>
+
+        </div>
+    </div>
+</body>
+</html>

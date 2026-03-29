@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- Defines this as an HTML5 document -->
+
+<html lang="en">
+<head>
+    <!-- Metadata for the page -->
+
+    <meta charset="UTF-8">
+    <!-- Ensures proper character encoding -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Makes page responsive -->
+
+    <title>Create an account</title>
+    <!-- Title shown in browser tab -->
+
+    <!-- Link to CSS styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Main container -->
+    <div class="page">
+
+        <!-- Page title -->
+        <div class="title-box">
+            <h1>Create an account</h1>
+        </div>
+
+        <!-- Display error message if validation fails -->
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <!-- Registration form -->
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <!-- Email input -->
+            <div class="form-block">
+                <label>E-mail address</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-block">
+                <label>Create Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <!-- Confirm password input -->
+            <div class="form-block">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+
+            <!-- Submit button -->
+            <div class="buttons">
+                <button type="submit" class="btn green">Sign Up</button>
+            </div>
+
+            <!-- Link to login page -->
+            <p class="account">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Login here</a>
+            </p>
+
+        </form>
+    </div>
+</body>
+</html>

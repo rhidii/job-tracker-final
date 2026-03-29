@@ -1,0 +1,133 @@
+/* Page background and overall text styling */
+body {
+    background: #222; /* dark background */
+    color: #fff; /* white text for contrast */
+    font-family: Arial, sans-serif; /* clean readable font */
+    margin: 0; /* removes default browser margin */
+    padding: 20px; /* spacing around content */
+}
+
+/* Main container for forms/pages */
+.page {
+    width: 900px; /* fixed width */
+    max-width: 95%; /* responsive on smaller screens */
+    margin: 40px auto; /* centres page horizontally */
+    background: #222; /* same dark background */
+    padding: 30px; /* inner spacing */
+    position: relative;
+}
+
+/* Title section styling */
+.title-box {
+    background: #777; /* grey background */
+    color: white;
+    text-align: center; /* centre title text */
+    padding: 15px;
+    width: 60%; /* not full width */
+    margin: 0 auto 20px; /* centre + spacing below */
+    border-radius: 6px; /* rounded corners */
+}
+
+/* Information box (instructions text) */
+.info {
+    background: #eee; /* light background for contrast */
+    color: #000; /* black text for readability */
+    padding: 15px;
+    margin: 20px 0; /* space above and below */
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Each input block (label + input) */
+.form-block {
+    margin-bottom: 20px; /* spacing between fields */
+}
+
+/* Label styling */
+label {
+    display: block; /* puts label above input */
+    margin-bottom: 6px;
+    font-weight: bold; /* emphasises label */
+}
+
+/* Input, textarea and dropdown styling */
+input,
+textarea,
+select {
+    width: 100%; /* full width */
+    padding: 10px;
+    border: 1px solid #bbb; /* light border */
+    border-radius: 5px; /* rounded edges */
+    box-sizing: border-box; /* includes padding in width */
+    font-size: 1em;
+}
+
+/* Textarea height */
+textarea {
+    height: 80px; /* default height */
+}
+
+/* Button container */
+.buttons {
+    text-align: center; /* centre buttons */
+    margin-top: 30px; /* space above */
+}
+
+/* General button styling */
+.btn {
+    padding: 10px 25px;
+    margin: 0 10px; /* space between buttons */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer; /* pointer on hover */
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Blue button (main action) */
+.blue {
+    background: #339cff;
+}
+
+/* Green button (success) */
+.green {
+    background: #7bd389;
+    color: #000; /* darker text for contrast */
+}
+
+/* Red button (delete/cancel) */
+.red {
+    background: #e74c3c;
+}
+
+/* Orange button (edit/update) */
+.orange {
+    background: #f4a261;
+    color: #000;
+}
+
+/* Account text (login/register links) */
+.account {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Account links */
+.account a {
+    color: #339cff; /* blue links */
+    text-decoration: none;
+}
+
+/* Hover effect for account links */
+.account a:hover {
+    text-decoration: underline;
+}
+
+/* Message display (errors/success messages) */
+.message {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffcc66; /* light orange for visibility */
+}

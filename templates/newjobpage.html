@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- Defines this as an HTML5 document -->
+
+<html lang="en">
+<head>
+    <!-- Metadata for the page -->
+
+    <meta charset="UTF-8">
+    <!-- Ensures proper character encoding -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Makes page responsive -->
+
+    <title>Add Job Application</title>
+    <!-- Title shown in browser tab -->
+
+    <!-- Link to CSS styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+</head>
+
+<body>
+    <!-- Main container -->
+    <div class="page">
+
+        <!-- Page title -->
+        <div class="title-box">
+            <h1>Add New Job Application</h1>
+        </div>
+
+        <!-- Display message if validation fails -->
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <!-- Instructions for user -->
+        <p class="info">
+            Please fill out the form below to add the details of your job application.
+            Fields that are required are marked with a *.
+        </p>
+
+        <!-- Form to add a new application -->
+        <form method="POST" action="{{ url_for('add_application') }}">
+
+            <!-- Company name -->
+            <div class="form-block">
+                <label>Company name *</label>
+                <input type="text" name="company" placeholder="Enter company name" required>
+            </div>
+
+            <!-- Job role -->
+            <div class="form-block">
+                <label>Job Position *</label>
+                <input type="text" name="role" placeholder="e.g. Data Intern" required>
+            </div>
+
+            <!-- Deadline -->
+            <div class="form-block">
+                <label>Application deadline *</label>
+                <input type="date" name="deadline" required>
+            </div>
+
+            <!-- Status dropdown -->
+            <div class="form-block">
+                <label>Application Status *</label>
+                <select name="status" required>
+                    <option value="Applied">Applied</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+
+            <!-- Optional job URL -->
+            <div class="form-block">
+                <label>Job Listing URL (optional)</label>
+                <input type="text" name="job_url">
+            </div>
+
+            <!-- Optional date applied -->
+            <div class="form-block">
+                <label>Date Applied (optional)</label>
+                <input type="date" name="date_applied">
+            </div>
+
+            <!-- Optional interview date -->
+            <div class="form-block">
+                <label>Interview Date (optional)</label>
+                <input type="date" name="interview_date">
+            </div>
+
+            <!-- Optional notes -->
+            <div class="form-block">
+                <label>Interview Notes (optional)</label>
+                <textarea name="notes" placeholder="Add any additional notes here"></textarea>
+            </div>
+
+            <!-- Optional cover letter -->
+            <div class="form-block">
+                <label>Cover Letter (optional)</label>
+                <textarea name="cover_letter" placeholder="Save a draft cover letter or notes for this application"></textarea>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="buttons">
+                <!-- Submit form -->
+                <button type="submit" class="btn green" id="submitBtn">Submit</button>
+
+                <!-- Cancel and go back -->
+                <a href="{{ url_for('dashboard') }}" class="btn red">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- JavaScript to prevent multiple submissions -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const submitBtn = document.getElementById("submitBtn");
+
+        if (form && submitBtn) {
+            form.addEventListener("submit", function () {
+                submitBtn.disabled = true; // disables button after click
+                submitBtn.innerText = "Submitting..."; // shows loading text
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>

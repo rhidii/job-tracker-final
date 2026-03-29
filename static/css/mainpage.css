@@ -1,0 +1,157 @@
+/* Page background and general text styling */
+body {
+    background-color: #222; /* dark background for whole page */
+    font-family: Arial, sans-serif; /* simple readable font */
+    color: #fff; /* white text for contrast */
+    padding: 20px; /* space inside the page */
+    margin: 0; /* removes default browser margin */
+}
+
+/* Main container to centre content */
+.container {
+    max-width: 1200px; /* limits width so it doesn’t stretch too wide */
+    margin: 0 auto; /* centres container horizontally */
+    padding: 20px; /* space inside container */
+}
+
+/* Navigation bar (login, logout links) */
+.nav {
+    margin-bottom: 20px; /* space below nav */
+    text-align: right; /* align links to the right */
+}
+
+/* Navigation links styling */
+.nav-link {
+    color: #fff; /* white text */
+    margin-left: 15px; /* space between links */
+    text-decoration: none; /* removes underline */
+    font-weight: bold; /* makes text stand out */
+}
+
+/* Hover effect for links */
+.nav-link:hover {
+    text-decoration: underline; /* underline appears on hover */
+}
+
+/* Title box styling */
+.title-box {
+    background-color: #777; /* grey background */
+    color: white; /* text colour */
+    text-align: center; /* centre the title */
+    padding: 15px; /* space inside box */
+    width: 60%; /* not full width */
+    margin: 0 auto 20px; /* centre horizontally + space below */
+    border-radius: 6px; /* rounded corners */
+}
+
+/* Search bar styling */
+#searchInput {
+    width: 400px; /* fixed width */
+    padding: 15px; /* makes it bigger and easier to type */
+    font-size: 1.1em; /* slightly larger text */
+    border-radius: 8px; /* rounded edges */
+    border: none; /* removes border */
+    display: block; /* allows centering */
+    margin: 0 auto 20px; /* centre + space below */
+}
+
+/* Table layout */
+table {
+    width: 100%; /* full width */
+    border-collapse: collapse; /* removes gaps between borders */
+    background-color: #606060; /* grey background */
+    border-radius: 8px; /* rounded corners */
+    overflow: hidden; /* keeps rounded corners clean */
+    margin-top: 10px; /* space above table */
+}
+
+/* Table header row */
+thead {
+    background-color: #808080; /* lighter grey for header */
+}
+
+/* Table headings */
+th {
+    padding: 10px; /* spacing */
+    font-weight: bold; /* emphasise headings */
+    font-size: 0.95em;
+    text-align: center; /* centre text */
+}
+
+/* Table cells */
+td {
+    padding: 10px;
+    border: 1px solid #808080; /* borders between cells */
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/* Status column base styling */
+td.status {
+    font-weight: bold; /* make status stand out */
+    color: #fff;
+}
+
+/* Different colours depending on status */
+td.status.applied {
+    background-color: #f39c12; /* orange */
+}
+
+td.status.interview {
+    background-color: #f1c40f; /* yellow */
+    color: #000; /* black text for readability */
+}
+
+td.status.offer {
+    background-color: #2ecc71; /* green */
+}
+
+td.status.rejected {
+    background-color: #e74c3c; /* red */
+}
+
+/* Buttons and links styled as buttons */
+.btn-link,
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    cursor: pointer; /* pointer on hover */
+    text-decoration: none; /* removes underline */
+    color: #fff;
+}
+
+/* Edit button */
+.edit-btn {
+    background-color: #f4a261; /* orange */
+}
+
+/* Delete button */
+.delete-btn {
+    background-color: #e74c3c; /* red */
+}
+
+/* Add application button */
+.add-btn {
+    display: block;
+    margin: 20px auto; /* centre horizontally */
+    padding: 15px 40px; /* large button */
+    background-color: #339cff; /* blue */
+    border-radius: 25px; /* rounded pill shape */
+    text-align: center;
+    width: fit-content;
+}
+
+/* Summary box showing stats */
+.summary-box {
+    background-color: orange; /* stands out visually */
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 600px; /* not too wide */
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1em;
+    color: #000; /* black text for contrast */
+}

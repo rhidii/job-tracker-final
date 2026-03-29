@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- Tells the browser this is an HTML5 document -->
+
+<html lang="en">
+<head>
+    <!-- Metadata about the page -->
+
+    <meta charset="UTF-8">
+    <!-- Ensures correct character encoding -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Makes the page responsive on different screen sizes -->
+
+    <title>Job Application Tracker</title>
+    <!-- Title shown in browser tab -->
+
+    <!-- Link to CSS file for styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}">
+
+    <!-- Link to JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+
+<body>
+    <!-- Main container for all content -->
+    <div class="container">
+
+        <!-- Navigation bar -->
+        <div class="nav">
+
+            <!-- Shows current user -->
+            <span class="nav-link">Logged in as {{ email }}</span>
+
+            <!-- If user is logged in -->
+            {% if email != "Guest" %}
+                <!-- Logout button with confirmation -->
+                <a class="nav-link" href="{{ url_for('logout') }}" onclick="return confirmLogout();">Logout</a>
+
+            <!-- If user is not logged in -->
+            {% else %}
+                <!-- Login and register links -->
+                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
+            {% endif %}
+        </div>
+
+        <!-- Page title -->
+        <div class="title-box">
+            <h1>Job Application Tracker</h1>
+        </div>
+
+        <!-- Search form -->
+        <form method="GET" action="{{ url_for('dashboard') if email != 'Guest' else url_for('home') }}">
+            <input
+                type="text"
+                id="searchInput"
+                name="search"
+                placeholder="Search by company or role"
+                value="{{ search_query }}"
+            >
+        </form>
+
+        <!-- If there are applications in database -->
+        {% if applications %}
+
+            <!-- Applications table -->
+            <table id="applicationsTable">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Edit Application</th>
+                        <th>Remove Application</th>
+                        <th>Interview Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Loop through each application -->
+                    {% for app in applications %}
+                    <tr>
+                        <td>{{ app["company"] }}</td>
+                        <td>{{ app["role"] }}</td>
+                        <td>{{ app["deadline"] or "" }}</td>
+
+                        <!-- Status with dynamic colour class -->
+                        <td class="status {{ app['status'].lower() }}">{{ app["status"] }}</td>
+
+                        <!-- Edit button -->
+                        <td>
+                            <a class="btn-link edit-btn" href="{{ url_for('edit_application', app_id=app['id']) }}">
+                                Edit application
+                            </a>
+                        </td>
+
+                        <!-- Delete button with confirmation -->
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_application', app_id=app['id']) }}" onsubmit="return confirmDelete();">
+                                <button type="submit" class="delete-btn">Remove application</button>
+                            </form>
+                        </td>
+
+                        <!-- Interview date -->
+                        <td>{{ app["interview_date"] or "" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Add application button -->
+            <a class="btn-link add-btn" href="{{ url_for('add_application') }}">Add Application</a>
+
+        {% else %}
+            <!-- If no applications exist -->
+
+            <table id="applicationsTable">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Edit Application</th>
+                        <th>Remove Application</th>
+                        <th>Interview Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Message when no data -->
+                    <tr>
+                        <td colspan="7">No applications added yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Show correct button depending on login state -->
+            {% if email != "Guest" %}
+                <a class="btn-link add-btn" href="{{ url_for('add_application') }}">Add Application</a>
+            {% else %}
+                <a class="btn-link add-btn" href="{{ url_for('login') }}">Login to Start</a>
+            {% endif %}
+        {% endif %}
+
+        <!-- Summary statistics -->
+        <div class="summary-box">
+            <p>Upcoming deadlines: {{ stats.upcoming_deadlines }}</p>
+            <p>Applied: {{ stats.applied }} | Interview: {{ stats.interview }} | Offer: {{ stats.offer }}</p>
+        </div>
+
+    </div>
+</body>
+</html>
