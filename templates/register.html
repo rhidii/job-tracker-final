@@ -16,6 +16,7 @@
 
     <!-- Link to CSS styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
 </head>
 
 <body>
@@ -44,7 +45,8 @@
             <!-- Password input -->
             <div class="form-block">
                 <label>Create Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <div id="password-message" style="color:red; font-size: 0.9em;"></div>
             </div>
 
             <!-- Confirm password input -->
