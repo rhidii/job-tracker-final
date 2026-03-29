@@ -62,12 +62,24 @@
             <!-- Status dropdown -->
             <div class="form-block">
                 <label>Application Status *</label>
-                <select name="status" required>
+                
+                <!-- Standard dropdown -->
+                <select name = "status">
+                    <option value="">--Select Status--</option>
                     <option value="Applied">Applied</option>
                     <option value="Interview">Interview</option>
                     <option value="Offer">Offer</option>
                     <option value="Rejected">Rejected</option>
                 </select>
+
+                <!-- Optional custom status input -->
+            <div class="form-block">
+                <label>Custom Status (optional)</label>
+                 <input 
+                     type = "text"
+                     name = "custom_status"
+                     placeholder = "Or type a custom status (optional)">
+                 <small> If you enter a custom status, it will override the dropdown selection.</small>
             </div>
 
             <!-- Optional job URL -->
