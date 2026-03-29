@@ -55,6 +55,31 @@ body {
     margin: 0 auto 20px; /* centre + space below */
 }
 
+/* Container for search + sort */
+.search-sort-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px; /* Space below container */
+}
+
+/* Search input styling */
+.search-input {
+    padding: 6px 10px;
+    font-size: 16px;
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
+/* Sort dropdown styling */
+.sort-select {
+    padding: 6px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 /* Table layout */
 table {
     width: 100%; /* full width */
@@ -110,6 +135,14 @@ td.status.rejected {
     background-color: #e74c3c; /* red */
 }
 
+.status.custom {
+    background-color: #a020f0;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-align: center;
+}
+
 /* Buttons and links styled as buttons */
 .btn-link,
 button {
@@ -120,6 +153,28 @@ button {
     cursor: pointer; /* pointer on hover */
     text-decoration: none; /* removes underline */
     color: #fff;
+}
+
+/* Warning box */
+.warnings-box {
+    border: 2px solid #ff4d4f;
+    background-color: orange;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.warnings-box h3 {
+    color: #ff1a1a;
+}
+
+/* Deadlines */
+.deadline-soon {
+    color: white;
+    background-color: red;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 /* Edit button */
@@ -141,6 +196,22 @@ button {
     border-radius: 25px; /* rounded pill shape */
     text-align: center;
     width: fit-content;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.pagination span {
+    margin: 0 10px;
 }
 
 /* Summary box showing stats */
