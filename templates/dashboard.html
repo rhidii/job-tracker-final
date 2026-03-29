@@ -15,10 +15,10 @@
     <!-- Title shown in browser tab -->
 
     <!-- Link to CSS file for styling -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/mainpage.css') }}">
 
     <!-- Link to JavaScript file -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
 </head>
 
 <body>
@@ -48,8 +48,9 @@
         <div class="title-box">
             <h1>Job Application Tracker</h1>
         </div>
-
-        <!-- Search form -->
+      
+    <!-- Search + Sort container -->
+    <div class="search-sort-container">
         <form method="GET" action="{{ url_for('dashboard') if email != 'Guest' else url_for('home') }}">
             <input
                 type="text"
@@ -58,7 +59,33 @@
                 placeholder="Search by company or role"
                 value="{{ search_query }}"
             >
+
+            <!-- Current status filter -->
+            <input type="hidden" name="status" value="{{ status_filter }}">
+
+            <!-- Sorting dropdown -->
+            <select name="sort" onchange="this.form.submit()">
+                <option value="deadline_asc" {% if sort_option=='deadline_asc' %}selected{% endif %}>Sort by Deadline (Soonest)</option>
+                <option value="company_asc" {% if sort_option=='company_asc' %}selected{% endif %}>Company A-Z</option>
+                <option value="company_desc" {% if sort_option=='company_desc' %}selected{% endif %}>Company Z-A</option>
+            </select>
+            
         </form>
+    </div>
+
+        <!-- Upcoming Deadline Warnings -->
+        {% if upcoming_warnings %}
+        <div class="warnings-box">
+            <h3>⚠ Upcoming Deadlines (Next 3 Days)</h3>
+            <ul>
+                {% for warning in upcoming_warnings %}
+                <li>
+                    {{ warning.company }} - {{ warning.role }} (Deadline: {{ warning.deadline }})
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
         <!-- If there are applications in database -->
         {% if applications %}
@@ -80,13 +107,31 @@
                 <tbody>
                     <!-- Loop through each application -->
                     {% for app in applications %}
-                    <tr>
+                    <tr class ="{% for warning in upcoming_warnings %}
+                                    {% if warning.company == app['company'] and warning.role == app['role'] %}
+                                        deadline-soon
+                                    {% endif %}
+                                {% endfor %}">
                         <td>{{ app["company"] }}</td>
                         <td>{{ app["role"] }}</td>
-                        <td>{{ app["deadline"] or "" }}</td>
+                        <td class="{% for warning in upcoming_warnings %}
+                                    {% if warning.company == app['company'] and warning.role == app['role'] %}
+                                        deadline-soon
+                                    {% endif %}
+                                {% endfor %}">
+                           {{ app["deadline"] or "" }}
+                        </td>
 
                         <!-- Status with dynamic colour class -->
-                        <td class="status {{ app['status'].lower() }}">{{ app["status"] }}</td>
+                        <td class="status 
+                            {% if app['status'] in ['Applied','Interview','Offer','Rejected'] %}
+                                {{ app['status'].lower()}}
+                            {% else %}
+                                custom 
+                            {% endif %}
+                        ">
+                            {{ app["status"] }}
+                        </td>
 
                         <!-- Edit button -->
                         <td>
@@ -111,7 +156,22 @@
 
             <!-- Add application button -->
             <a class="btn-link add-btn" href="{{ url_for('add_application') }}">Add Application</a>
+            <!-- Pagination -->
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="{{ url_for('dashboard', page=page-1, search=search_query, sort=sort_option, status=status_filter) }}">
+                        ← Previous
+            </a>
+                {% endif %}
 
+                <span>Page {{ page }} of {{ total_pages }}</span>
+
+                {% if page < total_pages %}
+                    <a href="{{ url_for('dashboard', page=page+1, search=search_query, sort=sort_option, status=status_filter) }}">
+                        Next →
+                    </a>
+                {% endif %}
+            </div>
         {% else %}
             <!-- If no applications exist -->
 
@@ -146,8 +206,19 @@
 
         <!-- Summary statistics -->
         <div class="summary-box">
-            <p>Upcoming deadlines: {{ stats.upcoming_deadlines }}</p>
-            <p>Applied: {{ stats.applied }} | Interview: {{ stats.interview }} | Offer: {{ stats.offer }}</p>
+            <p>Upcoming deadlines: {{ stats.get('upcoming_deadlines', 0) }}</p>
+            <p>
+                Applied: {{ stats.get('Applied', 0) }} |
+                Interview: {{ stats.get('Interview', 0) }} |
+                Offer: {{ stats.get('Offer', 0) }}
+            </p>
+
+        <!-- Optionally loop through any other custom statuses -->
+        {% for key, value in stats.items() %}
+            {% if key not in ['upcoming_deadlines', 'Applied', 'Interview', 'Offer'] %}
+            <p>{{ key }}: {{ value }}</p>
+            {% endif %}
+        {% endfor %}
         </div>
 
     </div>
