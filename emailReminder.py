@@ -59,6 +59,29 @@ Good luck with your application!
     # Send the email
     send_email(to_email, subject, body)
 
+def send_application_update(to_email, company, role):
+    subject = f"Application updated: {company}"
+    body = f"""
+Hello,
+
+Your job application for {role} at {company} has been successfully updated.
+
+If you did not make this change, please check your tracker immediately.
+
+"""
+    send_email(to_email, subject, body)
+
+def send_application_deleted(to_email, company, role):
+    subject = f"Application deleted: {company}"
+    body = f"""
+
+Hello,
+
+Your job application for {role} at {company} has been deleted.
+
+If this was a mistake, you may need to re-add it.
+"""
+    send_email(to_email, subject, body)
 
 def send_deadline_reminder(to_email, company, role, date_value, reminder_type="deadline"):
     """
