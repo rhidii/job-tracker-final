@@ -10,7 +10,7 @@
 # 6) Sends confirmation email on application save
 
 from flask import Flask, render_template, request, redirect, url_for, g, session
-from emailReminder import send_application_confirmation
+from emailReminder import send_application_confirmation, send_application_update, send_application_deleted, send_email
 import sqlite3
 from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -405,6 +405,9 @@ def edit_application(app_id):
                 (company, role, deadline, date_applied, interview_date, status, notes, job_url, cover_letter, app_id, session["user_id"])
             )
             db.commit()
+
+            # SEND UPDATE EMAIL
+            send_application_update(session["email"], company, role)
             return redirect(url_for("dashboard", message="Application successfully updated."))
         except sqlite3.IntegrityError:
             message = "That company and role already exists in your tracker."
@@ -418,10 +421,28 @@ def delete_application(app_id):
         return redirect(url_for("login"))
 
     db = get_db()
-    db.execute("DELETE FROM applications WHERE id = ? AND user_id = ?", (app_id, session["user_id"]))
-    db.commit()
-    return redirect(url_for("dashboard", message="Application successfully deleted."))
+    
+    # Get application info BEFORE deleting
+    application = db.execute(
+        "SELECT company, role FROM applications WHERE id = ? AND user_id = ?",
+        (app_id, session["user_id"])
+    ).fetchone()
 
+    # Delete the application
+    db.execute(
+        "DELETE FROM applications WHERE id = ? AND user_id = ?", 
+        (app_id, session["user_id"])
+        )
+    db.commit()
+
+    # Send email if application existed
+    if application:
+        company = application["company"]
+        role = application["role"]
+        from emailReminder import send_application_deleted
+        send_application_deleted(session["email"], company, role)
+    # Redirect to dashboard with success message
+    return redirect(url_for("dashboard", message="Application successfully deleted."))
 
 # SESSION MANAGEMENT
 
@@ -439,4 +460,3 @@ if __name__ == "__main__":
 
     # Run development server
     app.run(debug=True)
-
