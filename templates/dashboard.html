@@ -61,7 +61,14 @@
             >
 
             <!-- Current status filter -->
-            <input type="hidden" name="status" value="{{ status_filter }}">
+            <!-- Current status filter -->
+            <select name="status" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="Applied" {% if status_filter=='Applied' %}selected{% endif %}>Applied</option>
+                <option value="Interview" {% if status_filter=='Interview' %}selected{% endif %}>Interview</option>
+                <option value="Offer" {% if status_filter=='Offer' %}selected{% endif %}>Offer</option>
+                <option value="Rejected" {% if status_filter =='Rejected' %}selected{% endif %}>Rejected</option>
+            </select>
 
             <!-- Sorting dropdown -->
             <select name="sort" onchange="this.form.submit()">
