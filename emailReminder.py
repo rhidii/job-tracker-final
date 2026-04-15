@@ -189,3 +189,4 @@ def send_reminders():
 # Run this file directly to trigger reminders manually
 if __name__ == "__main__":
     send_reminders()
+
