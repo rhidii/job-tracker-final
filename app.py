@@ -14,6 +14,7 @@ from emailReminder import send_application_confirmation, send_application_update
 import sqlite3
 from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
+import string 
 
 # Create Flask app
 app = Flask(__name__)
@@ -88,7 +89,72 @@ def is_logged_in():
     """
     return "user_id" in session
 
+# Validates the password, system checks each letter and compares with the requirements to see if it's met
+def validate_password(password):
+    if len(password) < 10:
+        return "Password must be at least 10 characters long."
+    
+    if not any(char.isupper() for char in password):
+        return "Password must contain at least one uppercase letter."
+    
+    if not any(char.islower() for char in password):
+        return "Password must contain at least one lowercase letter."
+    
+    if not any(char.isdigit() for char in password):
+        return "Password must contain at least one number."
+    
+    if not any(char in string.punctuation for char in password):
+        return "Password must contain at least one symbol."
+    
+    return None
 
+#Function used to send the deadline reminders
+def send_deadline_reminders():
+    db = get_db()
+
+    today = datetime.now().date()
+    threshold = today + timedelta(days=3)
+
+    apps = db.execute("""
+        SELECT id, company, role, deadline, reminder_sent
+        FROM applications
+        WHERE user_id = ?
+        
+    """, (session["user_id"],)).fetchall()
+
+    for app in apps:
+        if app["deadline"] and app["reminder_sent"] == 0:
+            try:
+                deadline_date = datetime.strptime(app["deadline"], "%Y-%m-%d").date()
+
+                if today <= deadline_date <= threshold:
+
+                    subject = "Upcoming Job Application Deadline"
+
+                    body = f"""
+Reminder!
+
+Your application for {app["role"]} at {app["company"]} is due on {app["deadline"]}.
+
+Make sure to complete it before the deadline.
+
+- Job Tracker
+"""
+
+                    send_email(session["email"], subject, body)
+
+                    
+
+                    db.execute("""
+                        UPDATE applications
+                        SET reminder_sent = 1
+                        WHERE id = ?
+                    """, (app["id"],))
+
+            except ValueError:
+                continue
+
+    db.commit()
 # ROUTES
 
 @app.route("/")
@@ -134,10 +200,10 @@ def register():
             message = "Passwords do not match."
             return render_template("register.html", message=message)
 
-        if len(password) < 10:
-            message = "Password must be at least 10 characters long."
-            return render_template("register.html", message=message)
-
+        validation_error = validate_password(password)
+        if validation_error:
+            return render_template("register.html", message=validation_error)
+        
         db = get_db()
         password_hash = generate_password_hash(password)
 
@@ -187,10 +253,10 @@ def reset_password():
             message = "Passwords do not match."
             return render_template("forgettingpassword.html", message=message)
 
-        if len(new_password) < 10:
-            message = "Password must be at least 10 characters long."
-            return render_template("forgettingpassword.html", message=message)
-
+        validation_error = validate_password(new_password)
+        if validation_error:
+            return render_template("forgettingpassword.html", message=validation_error)
+        
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         if not user:
@@ -217,6 +283,8 @@ def dashboard():
     if not is_logged_in():
         return redirect(url_for("login"))
     
+    send_deadline_reminders()
+
     message = request.args.get("message", None) # <-- get the success message
 
     search_query = request.args.get("search", "").strip()
@@ -460,3 +528,4 @@ if __name__ == "__main__":
 
     # Run development server
     app.run(debug=True)
+
