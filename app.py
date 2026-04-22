@@ -8,6 +8,7 @@
 # 4) Handles authentication (login/register)
 # 5) Handles CRUD for job applications
 # 6) Sends confirmation email on application save
+# 7) Sends one email reminder before an application deadline 
 
 from flask import Flask, render_template, request, redirect, url_for, g, session
 from emailReminder import send_application_confirmation, send_application_update, send_application_deleted, send_email
@@ -116,10 +117,10 @@ def send_deadline_reminders():
     threshold = today + timedelta(days=3)
 
     apps = db.execute("""
-        SELECT id, company, role, deadline, reminder_sent
+        SELECT id, company, role, deadline, interview_date, 
+                    reminder_sent, interview_reminder_sent
         FROM applications
         WHERE user_id = ?
-        
     """, (session["user_id"],)).fetchall()
 
     for app in apps:
@@ -143,8 +144,6 @@ Make sure to complete it before the deadline.
 
                     send_email(session["email"], subject, body)
 
-                    
-
                     db.execute("""
                         UPDATE applications
                         SET reminder_sent = 1
@@ -153,6 +152,34 @@ Make sure to complete it before the deadline.
 
             except ValueError:
                 continue
+            
+        # INTERVIEW REMINDER 
+        if app["interview_date"] and app["interview_reminder_sent"] == 0:
+            try:
+                interview_date = datetime.strptime(app["interview_date"], "%Y-%m-%d").date()
+
+                if today <= interview_date <= threshold: 
+                    subject = "Upcoming Interview Reminder"
+                    body = f"""
+Reminder! 
+
+You have an interview for {app["role"]} at {app["company"]} 
+on {app["interview_date"]}.
+
+Make sure you're prepared. 
+
+Good luck! 
+- Job Tracker 
+"""
+                    send_email(session["email"], subject, body)
+
+                    db.execute("""
+                                UPDATE applications 
+                                SET interview_reminder_sent = 1 
+                                WHERE id = ?
+                    """, (app["id"],))
+            except ValueError:
+                pass        
 
     db.commit()
 # ROUTES
